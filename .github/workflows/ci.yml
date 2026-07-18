@@ -1,0 +1,113 @@
+name: CI
+
+# This workflow is kept in sync, step for step, with scripts/ci_local.sh.
+# Run `bash scripts/ci_local.sh` to reproduce the full pipeline locally
+# before pushing.
+#
+# Only three third-party actions are used, deliberately:
+#   actions/checkout@v4, actions/setup-node@v4, astral-sh/setup-uv@v4.
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  # Mirrors scripts/ci_local.sh's "[backend]" section.
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+
+      - name: Install poppler-utils
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+
+      - name: Create venv and install requirements
+        working-directory: app/server
+        run: |
+          uv venv --clear --python 3.12 .venv
+          uv pip install -r requirements.txt --python .venv/bin/python
+
+      - name: Run backend tests
+        working-directory: app/server
+        run: .venv/bin/python -m pytest tests/ -q
+
+  # Mirrors scripts/ci_local.sh's "[web]" and "[e2e]" sections.
+  web:
+    runs-on: ubuntu-latest
+    env:
+      CRAMDEX_HOME: ${{ runner.temp }}/cramdex-home
+      # Free on the GitHub-hosted runner (nothing else listens on it, unlike
+      # a developer's machine); scripts/ci_local.sh uses 8557 instead.
+      CRAMDEX_E2E_PORT: "8553"
+      CRAMDEX_E2E_QUERY: "Regolith Sweep"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: app/web/package-lock.json
+
+      - name: Install web dependencies
+        working-directory: app/web
+        run: npm ci
+
+      - name: Lint
+        working-directory: app/web
+        run: npm run lint
+
+      - name: Unit tests
+        working-directory: app/web
+        run: npm test -- --run
+
+      - name: Build
+        working-directory: app/web
+        run: npm run build
+
+      # --- e2e leg -----------------------------------------------------
+      # Playwright's webServer (see app/web/playwright.config.ts) launches
+      # uvicorn from the backend venv, so this job also needs the Python
+      # backend set up, same as the backend job above.
+      - uses: astral-sh/setup-uv@v4
+
+      - name: Install poppler-utils
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+
+      - name: Create backend venv and install requirements
+        working-directory: app/server
+        run: |
+          uv venv --clear --python 3.12 .venv
+          uv pip install -r requirements.txt --python .venv/bin/python
+
+      - name: Build demo pack
+        run: app/server/.venv/bin/python scripts/make_demo_pack.py
+
+      - name: Build corpus
+        run: bash scripts/build.sh
+
+      - name: Install Playwright chromium
+        working-directory: app/web
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright e2e
+        working-directory: app/web
+        # Explicit bash so the step runs with -o pipefail: GitHub's default
+        # shell would report tee's exit status, masking a Playwright failure
+        # that still happened to print "5 passed". Mirrors ci_local.sh's
+        # PIPESTATUS check.
+        shell: bash
+        run: npx playwright test --reporter=line | tee "${{ runner.temp }}/playwright-output.log"
+
+      # A skip-only run (e.g. CRAMDEX_HOME pointing at a pack with no built
+      # corpus) still exits 0 from Playwright's own point of view: every
+      # test calls test.skip() rather than failing. Without this guard the
+      # job would go green while proving nothing against the demo pack.
+      - name: Guard against a skip-only e2e run
+        run: |
+          if ! grep -q "5 passed" "${{ runner.temp }}/playwright-output.log"; then
+            echo "ERROR: expected '5 passed' in Playwright output; tests skipped or failed instead of running against the demo pack." >&2
+            exit 1
+          fi

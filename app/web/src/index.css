@@ -1,0 +1,125 @@
+@import "tailwindcss";
+@import "@fontsource/rajdhani/400.css";
+@import "@fontsource/rajdhani/500.css";
+@import "@fontsource/rajdhani/600.css";
+@import "@fontsource/rajdhani/700.css";
+@import "@fontsource/share-tech-mono/400.css";
+
+@theme {
+  --font-sans: "Rajdhani", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Share Tech Mono", ui-monospace, "SF Mono", monospace;
+
+  --color-bg: #0a0c10;        /* app background (page gradient #0a0c10 to #0c0f16) */
+  --color-panel: #11141b;     /* cards, sidebar */
+  --color-panel-2: #161a23;   /* nested surfaces, bar tracks, table header */
+  --color-edge: #262c3a;      /* default borders */
+  --color-edge-2: #39415a;    /* input borders, emphasized borders */
+  --color-fg: #e8ecf4;        /* primary text */
+  --color-muted: #8d96ab;     /* secondary text */
+  --color-faint: #565f75;     /* tertiary, labels */
+  --color-cy: #00e5ff;        /* cyan: citations, links, progress, active filters */
+  --color-yl: #f7e83c;        /* yellow: primary CTAs, active nav, highlights */
+  --color-rd: #ff2e55;        /* red: warnings, weak areas, section eyebrows */
+  --color-gn: #3cf78c;        /* green: success, online, done */
+  --color-cy-dim: rgba(0, 229, 255, 0.12);
+  --color-yl-dim: rgba(247, 232, 60, 0.10);
+  --color-rd-dim: rgba(255, 46, 85, 0.12);
+  --color-gn-dim: rgba(60, 247, 140, 0.12);
+}
+
+html {
+  background: var(--color-bg);
+  color: var(--color-fg);
+}
+
+body {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0a0c10 0%, #0c0f16 100%);
+  background-attachment: fixed;
+}
+
+::selection {
+  background: var(--color-yl);
+  color: #0a0c10;
+}
+
+/* Content links default to cyan; utility classes on a link still win. */
+@layer base {
+  main a {
+    color: var(--color-cy);
+  }
+  main a:hover {
+    color: #7ff0ff;
+  }
+}
+
+@layer components {
+  /* Chamfered corners for primary CTAs (top-left and bottom-right cut). */
+  .chamfer {
+    clip-path: polygon(
+      8px 0, 100% 0, 100% calc(100% - 8px),
+      calc(100% - 8px) 100%, 0 100%, 0 8px
+    );
+  }
+
+  /* System label: Share Tech Mono, uppercase, wide tracking. */
+  .mono-label {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  /* Larger chamfer for book cover tiles (resume card, books library). */
+  .chamfer-lg {
+    clip-path: polygon(
+      10px 0, 100% 0, 100% calc(100% - 10px),
+      calc(100% - 10px) 100%, 0 100%, 0 10px
+    );
+  }
+
+  /* HUD pulse shared by the corpus-online dot and the streaming cursor. */
+  .pulse-hud {
+    animation: pulse-hud 1.6s ease-in-out infinite;
+  }
+
+  /* Dashed neon fill for the sidebar readiness bar. */
+  .bar-dashed {
+    background: repeating-linear-gradient(
+      90deg, var(--color-cy) 0 6px, transparent 6px 8px
+    );
+  }
+
+  /* Focus glow for text inputs per the design spec. */
+  .input-hud {
+    background: var(--color-panel);
+    border: 1px solid var(--color-edge-2);
+    color: var(--color-fg);
+  }
+  .input-hud::placeholder {
+    color: var(--color-faint);
+    text-transform: uppercase;
+  }
+  .input-hud:focus {
+    outline: none;
+    border-color: var(--color-cy);
+    box-shadow: 0 0 0 1px var(--color-cy), 0 0 18px rgba(0, 229, 255, 0.15);
+  }
+}
+
+@keyframes pulse-hud {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+/* Print: the exam index print view renders as a plain white document. */
+@media print {
+  body {
+    background: #fff;
+  }
+  .print-sheet {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

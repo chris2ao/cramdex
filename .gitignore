@@ -1,0 +1,23 @@
+# Never commit course material or corpus artifacts
+.corpus/
+*.pdf
+*.docx
+*.pptx
+
+# Build and dependency output
+node_modules/
+.venv/
+dist/
+__pycache__/
+*.pyc
+.pytest_cache/
+test-results/
+playwright-report/
+coverage/
+
+# Local machine files
+.DS_Store
+.claude/settings.local.json
+
+# Private content-gate pattern list (see app/server/tests/test_content_gate.py)
+.content-gate.local
