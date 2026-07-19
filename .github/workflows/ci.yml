@@ -37,13 +37,17 @@ jobs:
   web:
     runs-on: ubuntu-latest
     env:
-      CRAMDEX_HOME: ${{ runner.temp }}/cramdex-home
       # Free on the GitHub-hosted runner (nothing else listens on it, unlike
       # a developer's machine); scripts/ci_local.sh uses 8557 instead.
       CRAMDEX_E2E_PORT: "8553"
       CRAMDEX_E2E_QUERY: "Regolith Sweep"
     steps:
       - uses: actions/checkout@v4
+
+      # The runner context is not available in job-level env, so the temp
+      # location for the demo pack home is exported at step level instead.
+      - name: Point CRAMDEX_HOME at the runner temp dir
+        run: echo "CRAMDEX_HOME=$RUNNER_TEMP/cramdex-home" >> "$GITHUB_ENV"
 
       - uses: actions/setup-node@v4
         with:
