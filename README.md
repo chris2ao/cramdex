@@ -4,19 +4,24 @@
 [![Release](https://img.shields.io/github/v/release/chris2ao/cramdex)](https://github.com/chris2ao/cramdex/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A local, single-user study app for courseware you own: book reader, ranked
-full-text search, flashcard quiz with per-topic mastery, AI-grounded Q&A,
-bookmarks, and an exam readiness dashboard.
+A local, single-user study app built for studying SANS courses and
+preparing the classic printed index for open-book GIAC certification
+exams: book reader, ranked full-text search, flashcard quiz with
+per-topic mastery, AI-grounded Q&A, bookmarks, an exam readiness
+dashboard, and a personal exam index builder.
 
-You supply your own course PDFs. Cramdex never ships, stores, or uploads
-course content; everything stays on your machine.
+Point it at the SANS book PDFs you own and it builds a private, searchable
+study environment on your machine. Cramdex never ships, stores, or uploads
+course content, and none is in this repository; you bring your own books.
+Other courseware that arrives as page-per-slide PDFs may work too, but
+SANS course books are the design target.
 
 See [app/README.md](app/README.md) for architecture and development
 details, [CHANGELOG.md](CHANGELOG.md) for release history, and
 [CONTRIBUTING.md](CONTRIBUTING.md) if you would like to help.
 
-Cramdex is an independent project, not affiliated with or endorsed by any
-courseware publisher.
+Cramdex is an independent community project, not affiliated with or
+endorsed by SANS Institute or GIAC (see [Independence](#independence)).
 
 ## Try it in two minutes
 
@@ -47,7 +52,7 @@ app/README.md's [LLM providers](app/README.md#llm-providers) section
 directly. The default `claude_cli` provider needs Claude Code installed and
 on `PATH`.
 
-## Use your own course books
+## Use your own SANS books
 
 ```bash
 git clone https://github.com/chris2ao/cramdex cramdex
@@ -65,7 +70,8 @@ walks through:
    then creates or updates the backend virtualenv.
 2. **Course name**, then a proposed slug (derived from the name) you can
    accept or edit.
-3. **Books folder**: a path to scan for PDFs. The scan is one level deep
+3. **Books folder**: the folder holding your downloaded SANS book PDFs
+   (or other course PDFs you own). The scan is one level deep
    (subdirectories are not descended into); you're re-prompted until it
    finds at least one PDF.
 4. **Book plan confirmation**: an editable list of the scanned books, in
@@ -133,7 +139,8 @@ described above:
 
 ### Exam index builder
 
-Build a personal, alphabetized index for an open-book exam. Capture entries
+Build the personal, alphabetized index that GIAC open-book exams reward,
+in the app instead of a spreadsheet. Capture entries
 from three places, each via a `[+INDEX]` button that pre-fills the citation:
 the search results view, the book reader, and the page image viewer. The
 capture dialog then asks for the term, your own definition, and an optional
@@ -188,8 +195,10 @@ For architecture, the pack layout, the API, and development commands, see
 
 ## Independence
 
-Cramdex is an independent open source study tool. It is not affiliated
-with, endorsed by, or sponsored by any training provider or certification
-body. Course materials belong to their owners; cramdex never includes,
-distributes, or requires any of them, and your own materials never leave
-your machine.
+Cramdex is an independent open source study tool built by and for
+students. It is not affiliated with, endorsed by, or sponsored by the
+SANS Institute, GIAC, or any other training provider or certification
+body. SANS and GIAC are trademarks of their respective owners, named here
+only to describe what cramdex is designed to work with. Course materials
+belong to their owners; cramdex never includes, distributes, or requires
+any of them, and your own materials never leave your machine.

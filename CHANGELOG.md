@@ -6,7 +6,9 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.0.0] - 2026-07-18
 
-Initial public release.
+Initial public release. Cramdex is built around studying SANS courses
+and preparing a GIAC-style index for open-book certification exams, while
+never containing any course material itself.
 
 ### Added
 

@@ -4,7 +4,7 @@ about: Something is broken or behaving unexpectedly
 labels: bug
 ---
 
-**Reminder: never paste real course material** (book titles, slide text,
+**Reminder: never paste real course material** (SANS book content, titles, slide text,
 glossary terms, page contents). Reproduce with the demo course
 (`./setup.sh --demo`) whenever possible.
 

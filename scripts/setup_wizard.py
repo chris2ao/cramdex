@@ -549,7 +549,7 @@ def prompt_books_dir(input_fn=input, print_fn=print,
     apart from a typo'd path.
     """
     while True:
-        raw = input_fn("Books folder (containing your course PDFs): ").strip()
+        raw = input_fn("Books folder (containing your course PDFs, e.g. your SANS books): ").strip()
         if not raw:
             print_fn("A books folder is required.")
             continue

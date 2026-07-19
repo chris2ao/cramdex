@@ -20,7 +20,7 @@ Useful commands while developing:
 
 ## Ground rules
 
-- **Never include real course material** in issues, pull requests, code,
+- **Never include real course material** (SANS or otherwise) in issues, pull requests, code,
   fixtures, screenshots, or commit messages. That includes book titles,
   glossary terms, slide text, and course identifiers. All reference
   content must be fictional; the demo course shows the pattern.

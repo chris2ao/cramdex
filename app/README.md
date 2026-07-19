@@ -1,6 +1,7 @@
 # Cramdex developer guide
 
-Cramdex is a local, single-user study app for courseware you own. It serves
+Cramdex is a local, single-user study app for courseware you own, designed
+around SANS course books and GIAC-style open-book exam prep. It serves
 an active course pack (books, glossary, frameworks, notes, labs) as a
 searchable, readable, quizzable corpus with real study-progress tracking:
 exam readiness, per-book reading position, per-topic quiz mastery with
