@@ -1,5 +1,9 @@
 # Cramdex
 
+[![CI](https://github.com/chris2ao/cramdex/actions/workflows/ci.yml/badge.svg)](https://github.com/chris2ao/cramdex/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/chris2ao/cramdex)](https://github.com/chris2ao/cramdex/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A local, single-user study app for courseware you own: book reader, ranked
 full-text search, flashcard quiz with per-topic mastery, AI-grounded Q&A,
 bookmarks, and an exam readiness dashboard.
@@ -7,8 +11,9 @@ bookmarks, and an exam readiness dashboard.
 You supply your own course PDFs. Cramdex never ships, stores, or uploads
 course content; everything stays on your machine.
 
-Status: pre-release. See [app/README.md](app/README.md) for architecture and
-development details.
+See [app/README.md](app/README.md) for architecture and development
+details, [CHANGELOG.md](CHANGELOG.md) for release history, and
+[CONTRIBUTING.md](CONTRIBUTING.md) if you would like to help.
 
 Cramdex is an independent project, not affiliated with or endorsed by any
 courseware publisher.
