@@ -54,3 +54,9 @@ test("the toggle collapses the open card and expands another", async () => {
   await userEvent.click(screen.getByRole("button", { name: "Beta Method" }));
   expect(await screen.findByText(/The cadence\./)).toBeInTheDocument();
 });
+
+test("a print view link is offered", () => {
+  renderPage();
+  expect(screen.getByRole("link", { name: "PRINT VIEW ▸" })).toHaveAttribute(
+    "href", "/reference/print");
+});

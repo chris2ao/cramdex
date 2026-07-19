@@ -4,6 +4,24 @@ All notable changes to cramdex are documented in this file. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-07-19
+
+### Added
+
+- Index print view options: A-Z letter sections with a "#" bucket, optional
+  page break per letter, cover sheet with the book color legend, font size
+  (S/M/L) and column (1/2) controls. Options persist locally.
+- Printable reference pack at /reference/print: glossary, acronyms, and
+  frameworks in a black-on-white print layout with per-section toggles.
+- DOCX export of the exam index (letter headings, per-book colored
+  citations, page-number footer), generated fully client-side via the new
+  docx dependency.
+
+### Changed
+
+- The index print view sets the document title during printing so browser
+  print headers show the course and index name.
+
 ## [1.0.1] - 2026-07-19
 
 ### Fixed
@@ -46,5 +64,6 @@ never containing any course material itself.
 - Multi-course support with in-app course switching.
 - Continuous integration mirrored step for step by `scripts/ci_local.sh`.
 
+[1.1.0]: https://github.com/chris2ao/cramdex/releases/tag/v1.1.0
 [1.0.1]: https://github.com/chris2ao/cramdex/releases/tag/v1.0.1
 [1.0.0]: https://github.com/chris2ao/cramdex/releases/tag/v1.0.0

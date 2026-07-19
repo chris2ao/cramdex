@@ -57,3 +57,9 @@ test("a term citation chip opens the lightbox", async () => {
   await userEvent.click(chip);
   expect(screen.getByRole("img", { name: /Book 2 page 76/ })).toBeInTheDocument();
 });
+
+test("a print view link is offered", () => {
+  renderPage();
+  expect(screen.getByRole("link", { name: "PRINT VIEW ▸" })).toHaveAttribute(
+    "href", "/reference/print");
+});

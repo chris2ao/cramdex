@@ -158,6 +158,17 @@ duplicate terms, and supports inline editing and per-citation removal. A
 dedicated print view (`/index/print`) lays the index out for printing, or
 exporting to PDF, as your physical exam copy.
 
+- Print options on that view: A-Z letter sections with a `#` bucket, an
+  optional page break per letter, an optional cover sheet with the book
+  color legend, and font size (S/M/L) and column (1/2) controls. Choices
+  persist locally.
+- A printable reference pack at `/reference/print` lays the glossary,
+  acronyms, and frameworks out in a black-on-white print layout, each
+  section toggleable.
+- EXPORT DOCX turns the index into a Word document, letter headings and
+  all, with per-book colored citations and a page-number footer, built
+  entirely client-side.
+
 Entries export to CSV or JSON, and a JSON file can be re-imported. Import is
 additive and conservative: incoming entries whose term already exists in your
 index are skipped rather than merged, and the page reports how many entries

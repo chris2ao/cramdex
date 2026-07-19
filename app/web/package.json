@@ -1,7 +1,7 @@
 {
   "name": "web",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,6 +15,7 @@
     "@fontsource/rajdhani": "^5.2.7",
     "@fontsource/share-tech-mono": "^5.2.7",
     "cmdk": "^1.1.1",
+    "docx": "^9.7.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-markdown": "^10.1.0",

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
 import { CitationText } from "../components/CitationText";
 import { Panel } from "../components/ui/Panel";
@@ -21,7 +22,10 @@ export function Glossary() {
   return (
     <div>
       <Eyebrow className="mb-2">DATA_BANK</Eyebrow>
-      <h1 className="mb-4 text-[30px] font-bold uppercase tracking-wide text-fg">Glossary</h1>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-[30px] font-bold uppercase tracking-wide text-fg">Glossary</h1>
+        <Link to="/reference/print" className="mono-label text-[10px] text-cy">PRINT VIEW ▸</Link>
+      </div>
       <input
         value={filter}
         onChange={(e) => setFilter(e.target.value)}

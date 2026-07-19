@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
 import { MarkdownView } from "../components/MarkdownView";
 import { Panel } from "../components/ui/Panel";
@@ -32,7 +33,10 @@ export function Frameworks() {
   return (
     <div>
       <Eyebrow className="mb-2">PROTOCOL_LIBRARY</Eyebrow>
-      <h1 className="text-[30px] font-bold uppercase tracking-wide text-fg">Key frameworks</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-[30px] font-bold uppercase tracking-wide text-fg">Key frameworks</h1>
+        <Link to="/reference/print" className="mono-label text-[10px] text-cy">PRINT VIEW ▸</Link>
+      </div>
       <p className="mb-5 mt-1.5 font-mono text-[11px] tracking-[0.05em] text-faint">
         THE MNEMONICS THAT STRUCTURE THE COURSE · SELECT TO EXPAND
       </p>

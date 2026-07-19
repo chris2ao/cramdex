@@ -28,12 +28,17 @@ export function toJson(entries: IndexEntry[]): string {
   return JSON.stringify({ version: 1, entries }, null, 2) + "\n";
 }
 
-/** Triggers a browser download of `text` as `filename`. */
-export function downloadText(filename: string, mime: string, text: string): void {
-  const url = URL.createObjectURL(new Blob([text], { type: mime }));
+/** Triggers a browser download of `blob` as `filename`. */
+export function downloadBlob(filename: string, blob: Blob): void {
+  const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
   a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+/** Triggers a browser download of `text` as `filename`. */
+export function downloadText(filename: string, mime: string, text: string): void {
+  downloadBlob(filename, new Blob([text], { type: mime }));
 }

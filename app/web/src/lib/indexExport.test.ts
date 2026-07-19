@@ -1,5 +1,5 @@
 import type { IndexEntry } from "../stores/examIndex";
-import { toCsv, toJson } from "./indexExport";
+import { downloadBlob, downloadText, toCsv, toJson } from "./indexExport";
 
 const ENTRY = (term: string, extra: Partial<IndexEntry> = {}): IndexEntry => ({
   id: `id-${term}`, term, definition: "", topic: "", at: 1,
@@ -42,4 +42,44 @@ test("toJson wraps entries in the version 1 document format", () => {
   expect(doc.version).toBe(1);
   expect(doc.entries).toHaveLength(1);
   expect(doc.entries[0].term).toBe("Dust Lock");
+});
+
+function stubAnchorDownload() {
+  const anchor = document.createElement("a");
+  const clickSpy = vi.spyOn(anchor, "click").mockImplementation(() => {});
+  vi.spyOn(document, "createElement").mockReturnValue(anchor);
+  let capturedBlob: Blob | null = null;
+  vi.spyOn(URL, "createObjectURL").mockImplementation((blob) => {
+    capturedBlob = blob as Blob;
+    return "blob:mock-url";
+  });
+  const revokeSpy = vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => {});
+  return { anchor, clickSpy, revokeSpy, getBlob: () => capturedBlob };
+}
+
+test("downloadBlob triggers an anchor download of the given blob and revokes the URL", () => {
+  const { anchor, clickSpy, revokeSpy, getBlob } = stubAnchorDownload();
+
+  downloadBlob("cramdex-index.docx", new Blob(["x"], { type: "application/vnd.docx" }));
+
+  expect(anchor.href).toBe("blob:mock-url");
+  expect(anchor.download).toBe("cramdex-index.docx");
+  expect(clickSpy).toHaveBeenCalledTimes(1);
+  expect(getBlob()?.type).toBe("application/vnd.docx");
+  expect(revokeSpy).toHaveBeenCalledWith("blob:mock-url");
+
+  vi.restoreAllMocks();
+});
+
+test("downloadText triggers an anchor download of the text wrapped in a blob", async () => {
+  const { anchor, clickSpy, getBlob } = stubAnchorDownload();
+
+  downloadText("cramdex-index.csv", "text/csv", "term,definition\n");
+
+  expect(anchor.download).toBe("cramdex-index.csv");
+  expect(clickSpy).toHaveBeenCalledTimes(1);
+  expect(getBlob()?.type).toBe("text/csv");
+  expect(await getBlob()?.text()).toBe("term,definition\n");
+
+  vi.restoreAllMocks();
 });

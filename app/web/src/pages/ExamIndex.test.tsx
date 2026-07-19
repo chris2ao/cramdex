@@ -133,6 +133,7 @@ test("export buttons and print link are present when entries exist", async () =>
   expect(screen.getByText(/1 ENTRY\b/)).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "EXPORT CSV" })).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "EXPORT JSON" })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "EXPORT DOCX" })).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "IMPORT JSON" })).toBeInTheDocument();
   expect(screen.getByRole("link", { name: /print view/i })).toHaveAttribute(
     "href", "/index/print");

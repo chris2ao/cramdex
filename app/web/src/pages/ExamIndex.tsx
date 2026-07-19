@@ -7,10 +7,12 @@ import { IndexSuggestions } from "../components/IndexSuggestions";
 import { Panel } from "../components/ui/Panel";
 import { ButtonSecondary } from "../components/ui/Button";
 import { Eyebrow } from "../components/ui/Text";
-import { downloadText, toCsv, toJson } from "../lib/indexExport";
+import { downloadBlob, downloadText, toCsv, toJson } from "../lib/indexExport";
 import { bookColor } from "../lib/bookColor";
 import { useCourse } from "../lib/course";
 import type { CourseBook } from "../lib/course";
+import { groupByLetter } from "../lib/indexGroups";
+import { printSettingsStore } from "../stores/printSettings";
 import type { IndexEntry } from "../stores/examIndex";
 import {
   duplicateTerms, examIndexStore, importEntries, normalizeTerm, removeCitation, removeEntry,
@@ -193,6 +195,13 @@ export function ExamIndex() {
           "cramdex-index.csv", "text/csv", toCsv(state.entries))}>EXPORT CSV</ButtonSecondary>
         <ButtonSecondary onClick={() => downloadText(
           "cramdex-index.json", "application/json", toJson(state.entries))}>EXPORT JSON</ButtonSecondary>
+        <ButtonSecondary onClick={async () => {
+          const { Packer } = await import("docx");
+          const { buildIndexDoc } = await import("../lib/indexDocx");
+          const doc = buildIndexDoc(course?.name ?? "Course",
+            groupByLetter(state.entries), course?.books ?? [], printSettingsStore.get());
+          downloadBlob("cramdex-index.docx", await Packer.toBlob(doc));
+        }}>EXPORT DOCX</ButtonSecondary>
         <ButtonSecondary onClick={() => fileRef.current?.click()}>IMPORT JSON</ButtonSecondary>
         <input ref={fileRef} type="file" accept="application/json,.json"
                className="hidden" aria-label="Import index JSON file" onChange={onImportFile} />

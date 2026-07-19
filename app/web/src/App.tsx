@@ -19,6 +19,7 @@ import { Assets } from "./pages/Assets";
 import { Quiz } from "./pages/Quiz";
 import { ExamIndex } from "./pages/ExamIndex";
 import { IndexPrint } from "./pages/IndexPrint";
+import { ReferencePrint } from "./pages/ReferencePrint";
 
 export function AppShell() {
   return (
@@ -47,6 +48,7 @@ export function AppShell() {
               <Route path="/quiz" element={<Quiz />} />
               <Route path="/index" element={<ExamIndex />} />
               <Route path="/index/print" element={<IndexPrint />} />
+              <Route path="/reference/print" element={<ReferencePrint />} />
             </Routes>
           </main>
         </div>
