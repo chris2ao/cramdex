@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { LightboxProvider } from "../components/Lightbox";
@@ -21,6 +21,34 @@ beforeEach(() => {
   resetCourseCache();
 });
 
+test("book filter pills derive from the active course, not a fixed list", async () => {
+  vi.stubGlobal("fetch", vi.fn(async (url: unknown) => {
+    if (String(url).includes("/api/course")) {
+      return {
+        ok: true,
+        json: async () => ({
+          name: "Demo Course", exam_date: null,
+          books: [
+            { slug: "book1", label: "Book 1" },
+            { slug: "book2", label: "Book 2" },
+            { slug: "workbook", label: "Workbook" },
+          ],
+        }),
+      };
+    }
+    return { ok: true, json: async () => ({ query: "q", mode: "phrase", results: [] }) };
+  }) as any);
+
+  render(<MemoryRouter><LightboxProvider><Search /></LightboxProvider></MemoryRouter>);
+  const group = await screen.findByRole("group", { name: /filter by book/i });
+  expect(await within(group).findByRole("button", { name: "Book 1" })).toBeInTheDocument();
+  expect(within(group).getByRole("button", { name: "Book 2" })).toBeInTheDocument();
+  expect(within(group).getByRole("button", { name: "Workbook" })).toBeInTheDocument();
+  expect(within(group).getByRole("button", { name: "ALL" })).toBeInTheDocument();
+  expect(within(group).queryByRole("button", { name: "BK3" })).not.toBeInTheDocument();
+  expect(within(group).queryByRole("button", { name: "BKB" })).not.toBeInTheDocument();
+});
+
 test("searching renders hits with highlighted snippet and citation chip", async () => {
   render(<MemoryRouter><LightboxProvider><Search /></LightboxProvider></MemoryRouter>);
   await userEvent.type(screen.getByPlaceholderText(/type query/i), "ops tempo{enter}");
@@ -33,12 +61,20 @@ test("a slow stale response does not overwrite newer results", async () => {
   const fast = { ...HIT, snippet: "the [[fresh]] result" };
   let resolveSlow: (v: unknown) => void = () => {};
   const slowPromise = new Promise((r) => { resolveSlow = r; });
-  vi.stubGlobal("fetch", vi.fn()
-    .mockImplementationOnce(() => slowPromise)
-    .mockImplementationOnce(async () => ({
+  // The course fetch must not consume the sequenced search responses.
+  const searchResponses: Array<() => unknown> = [
+    () => slowPromise,
+    async () => ({
       ok: true,
       json: async () => ({ query: "q", mode: "phrase", results: [fast] }),
-    })) as any);
+    }),
+  ];
+  vi.stubGlobal("fetch", vi.fn(async (url: unknown) => {
+    if (String(url).includes("/api/course")) {
+      return { ok: true, json: async () => ({ name: "C", exam_date: null, books: [] }) };
+    }
+    return searchResponses.shift()!();
+  }) as any);
 
   render(<MemoryRouter><LightboxProvider><Search /></LightboxProvider></MemoryRouter>);
   const input = screen.getByPlaceholderText(/type query/i);

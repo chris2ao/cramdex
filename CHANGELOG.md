@@ -4,6 +4,15 @@ All notable changes to cramdex are documented in this file. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-07-19
+
+### Fixed
+
+- The search page's book filter pills now derive from the active course
+  instead of a fixed seven-book list left over from the app's original
+  course layout. Packs with fewer or differently named books no longer
+  show dead filter pills.
+
 ## [1.0.0] - 2026-07-18
 
 Initial public release. Cramdex is built around studying SANS courses
@@ -37,4 +46,5 @@ never containing any course material itself.
 - Multi-course support with in-app course switching.
 - Continuous integration mirrored step for step by `scripts/ci_local.sh`.
 
+[1.0.1]: https://github.com/chris2ao/cramdex/releases/tag/v1.0.1
 [1.0.0]: https://github.com/chris2ao/cramdex/releases/tag/v1.0.0

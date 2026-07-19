@@ -9,20 +9,10 @@ import { Pill } from "../components/ui/Pill";
 import { useStore } from "../stores/useStore";
 import { bookmarksStore, addBookmark, removeBookmark, isBookmarked } from "../stores/bookmarks";
 import { AddToIndexButton } from "../components/IndexCapture";
+import { useCourse } from "../lib/course";
 
 type Hit = { slug: string; label: string; pdf_page: number;
              printed_page: number; snippet: string; score: number };
-
-const BOOKS: Array<{ slug: string; label: string }> = [
-  { slug: "", label: "ALL" },
-  { slug: "book1", label: "BK1" },
-  { slug: "book2", label: "BK2" },
-  { slug: "book3", label: "BK3" },
-  { slug: "book4", label: "BK4" },
-  { slug: "book5", label: "BK5" },
-  { slug: "bookB", label: "BKB" },
-  { slug: "workbook", label: "WKBK" },
-];
 
 /** Strips the [[..]] match markers and trims for a bookmark note. */
 function plainSnippet(text: string): string {
@@ -79,6 +69,7 @@ function ResultCard({ hit }: { hit: Hit }) {
 
 export function Search() {
   const [params] = useSearchParams();
+  const course = useCourse();
   const [q, setQ] = useState(params.get("q") ?? "");
   const [lastQuery, setLastQuery] = useState("");
   const [elapsed, setElapsed] = useState<number | null>(null);
@@ -134,7 +125,7 @@ export function Search() {
       </div>
 
       <div className="mb-4 flex flex-wrap gap-2" role="group" aria-label="Filter by book">
-        {BOOKS.map((b) => (
+        {[{ slug: "", label: "ALL" }, ...(course?.books ?? [])].map((b) => (
           <Pill key={b.slug || "all"} active={book === b.slug} onClick={() => setBook(b.slug)}>
             {b.label}
           </Pill>
